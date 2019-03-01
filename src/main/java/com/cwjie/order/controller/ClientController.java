@@ -1,5 +1,6 @@
 package com.cwjie.order.controller;
 
+import com.cwjie.order.client.ProductClient;
 import com.cwjie.order.config.RestTemplateConfig;
 import org.springframework.cloud.client.ServiceInstance;
 import org.springframework.cloud.client.loadbalancer.LoadBalanced;
@@ -25,8 +26,11 @@ public class ClientController {
     @Resource
     private RestTemplate restTemplate;
 
+    @Resource
+    private ProductClient productClient;
+
     @GetMapping("/getProductMsg")
-    public String getProductMsg(){
+    public String getProductMsg() {
         // 第一种方式
         /*RestTemplate restTemplate = new RestTemplate();
         String forObject = restTemplate.getForObject("http://localhost:8080/msg", String.class);*/
@@ -38,7 +42,9 @@ public class ClientController {
         String forObject = restTemplate.getForObject(url, String.class);*/
 
         // 第三种方式(利用@LoadBalanced,可在restTempalte里使用应用名字)
-        String forObject = restTemplate.getForObject("http://PRODUCT/msg", String.class);
+//        String forObject = restTemplate.getForObject("http://PRODUCT/msg", String.class);
+
+        String forObject = productClient.getProductMsg();
 
         return forObject;
 
